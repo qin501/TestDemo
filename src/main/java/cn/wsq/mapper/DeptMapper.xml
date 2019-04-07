@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wsq.mapper.DeptMapper">
+    <!--获取所有的数据-->
+    <select id="getList" resultType="dept">
+        select * from dept
+    </select>
+    <!--根据id更新-->
+    <update id="updateDept" parameterType="dept">
+        update dept
+            <set>
+                <if test="deptName!=null and deptName != ''">
+                       	deptName=#{deptName},
+                </if>
+                <if test="deptLoc!=null and deptLoc != ''">
+                       	deptLoc=#{deptLoc},
+                </if>
+
+            </set>
+            where deptid=#{deptid}
+    </update>
+    <!--添加数据-->
+    <insert id="addDept" parameterType="dept" keyColumn="deptid" keyProperty="deptid" useGeneratedKeys="true">
+        insert into dept
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="deptName!=null and deptName != ''">
+                       	deptName ,
+                </if>
+                <if test="deptLoc!=null and deptLoc != ''">
+                       	deptLoc ,
+                </if>
+
+            </trim>
+        values
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="deptName!=null and deptName != ''">
+                       #{deptName} ,
+                </if>
+                <if test="deptLoc!=null and deptLoc != ''">
+                       #{deptLoc} ,
+                </if>
+
+            </trim>
+
+    </insert>
+    <!--根据id删除数据-->
+    <delete id="deleteDept" parameterType="Integer">
+          delete from dept where deptid=#{value}
+    </delete>
+    <!--根据实体类对象查询-->
+    <select id="searchByEntity" parameterType="dept" resultType="dept">
+        select * from dept
+        <where>
+                <if test="deptid!=null and deptid != ''">
+                       and deptid like concat('%',#{deptid},'%')
+                </if>
+                <if test="deptName!=null and deptName != ''">
+                       and deptName like concat('%',#{deptName},'%')
+                </if>
+                <if test="deptLoc!=null and deptLoc != ''">
+                       and deptLoc like concat('%',#{deptLoc},'%')
+                </if>
+
+        </where>
+    </select>
+    <!--根据Id获取-->
+    <select id="getDeptById" parameterType="Integer" resultType="dept">
+        select * from dept where deptid=#{value}
+    </select>
+</mapper>
